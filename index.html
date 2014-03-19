@@ -29,48 +29,42 @@
     <script type="text/jsx">
       /** @jsx React.DOM */
 
-      var principal = 80000;
-      var monthlyRate = 12.0;
-      var dailyRate = monthlyRate / 12 / 100;
-      var futureValue = principal;
-      var dueDate = new Date("2014-01-02");
-
-      var days = 14;
-
-      var dailyTotals = [];
-
-      for (i=1; i<=days; i++) {
-        var day = moment(dueDate);
-        day.add("days", i);
-        var interest = futureValue * dailyRate;
-        futureValue = futureValue + interest;
-        dailyTotals.push({
-          date: day.format(),
-          interest: interest,
-          total: futureValue
-        });
-      }
-      console.log(dailyTotals);
-
       var Interest = React.createClass({
         getInitialState: function() {
           return {
             interestRate: 16.0,
-            displayDays: 14
+            displayDays: 14,
+            principal: 80000,
+            dueDate: new Date()
           }
         },
-        render: function() {
-          var days=[];
+        componentWillMount: function() {
+          this.calculate();
+        },
+        calculate: function() {
+          var monthlyRate = this.state.interestRate / 12 / 100;
+          var futureValue = this.state.principal;
+
+          this.dayRows = [];
+
           for (i=1; i<=this.state.displayDays; i++) {
-            days.push(
+            var day = moment(this.state.dueDate);
+            day.add("days", i);
+            var interest = futureValue * monthlyRate;
+            interest = Math.round(interest * 100) / 100;
+            futureValue = futureValue + interest;
+            futureValue = Math.round(futureValue * 100) / 100;
+            this.dayRows.push(
               <tr>
-                <td>1</td>
-                <td>12 Jan</td>
-                <td>$400</td>
-                <td>$4400</td>
+                <td>{i}</td>
+                <td>{day.format("D MMM")}</td>
+                <td>${interest}</td>
+                <td>${futureValue}</td>
               </tr>
             );
-          }
+          }    
+        },
+        render: function() {
           return (
             <div>
               <form className="form-horizontal" role="form">
@@ -112,7 +106,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {days}
+                  {this.dayRows}
                 </tbody>
               </table>
             </div>
