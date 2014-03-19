@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>interest-ing</title>
+    <!-- For React.js IE 8 support -->
+    <!--[if lt IE 9]>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-sham.js"></script>
+    <![endif]-->
+
+    <!-- React.js -->
+    <script src="http://fb.me/react-0.9.0.js"></script>
+
+    <!-- Allows us to use JSX below - notice the <script type="text/jsx">, that’s normally <script type="text/javascript"> -->
+    <script src="http://fb.me/JSXTransformer-0.9.0.js"></script>
+
+    <!-- jQuery -->
+    <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
+
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/united/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  </head>
+  <body>
+    <div id="content" class="container"></div>
+    <script type="text/jsx">
+      /** @jsx React.DOM */
+
+      var Interest = React.createClass({
+        render: function() {
+          return (
+            <h1>{this.helloWorld()}</h1>
+          );
+        },
+        helloWorld: function() {
+          var number = 100 * 4; 
+          return number;
+        }
+      });
+
+      $(function() {
+        React.renderComponent(<Interest />, $('#content').get(0));
+      });
+    </script>
+  </body>
+</html>
