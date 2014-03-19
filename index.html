@@ -24,60 +24,7 @@
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
   </head>
   <body>
-    <div id="content" class="container">
-      <form class="form-horizontal" role="form">
-        <legend>Interest-ing</legend>
-        <div class="form-group">
-          <label for="principal" class="col-sm-2 control-label">Principal</label>
-          <div class="col-sm-10 input-group">
-            <span class="input-group-addon">
-            <i class="fa fa-money"></i>
-          </span>
-            <input type="text" class="form-control" id="principal" placeholder="5000">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="due" class="col-sm-2 control-label">Due</label>
-          <div class="col-sm-10 input-group">
-             <span class="input-group-addon"> 
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <input type="text" class="form-control" id="due" placeholder="YYYY-MM-DD">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="rate" class="col-sm-2 control-label">Interest rate</label>
-          <div class="col-sm-10 input-group">
-            <input type="text" class="form-control" id="rate" value="2.0">
-            <span class="input-group-addon">%</span>
-          </div>
-        </div>
-      </form>
-      <hr />
-      <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Date</th>
-          <th>Interest</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>12 Jan</td>
-          <td>$400</td>
-          <td>$4400</td>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>13 Jan</td>
-          <td>$400</td>
-          <td>$4800</td>
-        </tr>
-      </tbody>
-    </table>
+    <div id="container" class="container">
     </div>
     <script type="text/jsx">
       /** @jsx React.DOM */
@@ -106,19 +53,89 @@
       console.log(dailyTotals);
 
       var Interest = React.createClass({
+        getInitialState: function() {
+          return {
+            interestRate: 16.0,
+            displayDays: 14
+          }
+        },
         render: function() {
+          var days=[];
+          for (i=1; i<=this.state.displayDays; i++) {
+            days.push(
+              <tr>
+                <td>1</td>
+                <td>12 Jan</td>
+                <td>$400</td>
+                <td>$4400</td>
+              </tr>
+            );
+          }
           return (
-            <h1>{this.helloWorld()}</h1>
+            <div>
+              <form className="form-horizontal" role="form">
+                <legend>Interest-ing</legend>
+                <div className="form-group">
+                  <label for="principal" className="col-sm-2 control-label">Principal</label>
+                  <div className="col-sm-10 input-group">
+                    <span className="input-group-addon">
+                    <i className="fa fa-money"></i>
+                  </span>
+                    <input type="text" className="form-control" id="principal" placeholder="5000" onChange={this.handleChange} ref="principal" />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label for="due" className="col-sm-2 control-label">Due</label>
+                  <div className="col-sm-10 input-group">
+                     <span className="input-group-addon"> 
+                      <i className="fa fa-calendar-o"></i>
+                    </span>
+                    <input type="text" className="form-control" id="due" placeholder="YYYY-MM-DD" />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label for="rate" className="col-sm-2 control-label">Interest rate</label>
+                  <div className="col-sm-10 input-group">
+                    <input type="text" className="form-control" ref="rate" id="rate" value={this.state.interestRate} onChange={this.updateInterestRate} />
+                    <span className="input-group-addon">%</span>
+                  </div>
+                </div>
+              </form>
+              <hr />
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Interest</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {days}
+                </tbody>
+              </table>
+            </div>
           );
         },
-        helloWorld: function() {
-          var number = 100 * 4; 
-          return number;
+        handleChange: function() {
+          var p = parseFloat(this.refs.principal.getDOMNode().value);
+          if (isNaN(p)) {
+            p = 1;
+          }
+          console.log(p);
+        },
+        updateInterestRate: function() {
+          var interestRate = parseFloat(this.refs.principal.getDOMNode().value);
+          if (isNaN(interestRate)) {
+            interestRate = 16;
+          }
+          this.setState({interestRate: interestRate});
         }
       });
 
       $(function() {
-        //React.renderComponent(<Interest />, $('#content').get(0));
+        React.renderComponent(<Interest />, $('#container').get(0));
       });
     </script>
   </body>
