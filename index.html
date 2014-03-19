@@ -38,9 +38,6 @@
             dueDate: new Date()
           }
         },
-        componentWillMount: function() {
-          this.calculate();
-        },
         calculate: function() {
           var monthlyRate = this.state.interestRate / 12 / 100;
           var futureValue = this.state.principal;
@@ -65,6 +62,7 @@
           }    
         },
         render: function() {
+          this.calculate();
           return (
             <div>
               <form className="form-horizontal" role="form">
@@ -75,7 +73,7 @@
                     <span className="input-group-addon">
                     <i className="fa fa-money"></i>
                   </span>
-                    <input type="text" className="form-control" id="principal" placeholder="5000" onChange={this.handleChange} ref="principal" />
+                    <input type="text" className="form-control" id="principal" value={this.state.principal} onChange={this.handlePrincipalChange} ref="principal" />
                   </div>
                 </div>
                 <div className="form-group">
@@ -84,13 +82,13 @@
                      <span className="input-group-addon"> 
                       <i className="fa fa-calendar-o"></i>
                     </span>
-                    <input type="text" className="form-control" id="due" placeholder="YYYY-MM-DD" />
+                    <input type="text" className="form-control" id="due" placeholder="YYYY-MM-DD" ref="dueDate" onChange={this.handleDueDateChange} />
                   </div>
                 </div>
                 <div className="form-group">
                   <label for="rate" className="col-sm-2 control-label">Interest rate</label>
                   <div className="col-sm-10 input-group">
-                    <input type="text" className="form-control" ref="rate" id="rate" value={this.state.interestRate} onChange={this.updateInterestRate} />
+                    <input type="text" className="form-control" ref="rate" id="rate" value={this.state.interestRate} onChange={this.handleInterestRateChange} />
                     <span className="input-group-addon">%</span>
                   </div>
                 </div>
@@ -112,19 +110,23 @@
             </div>
           );
         },
-        handleChange: function() {
-          var p = parseFloat(this.refs.principal.getDOMNode().value);
-          if (isNaN(p)) {
-            p = 1;
+        handlePrincipalChange: function() {
+          var principal = parseFloat(this.refs.principal.getDOMNode().value);
+          if (isNaN(principal)) {
+            principal = 1;
           }
-          console.log(p);
+          this.setState({principal: principal});
         },
-        updateInterestRate: function() {
-          var interestRate = parseFloat(this.refs.principal.getDOMNode().value);
+        handleInterestRateChange: function() {
+          var interestRate = parseFloat(this.refs.rate.getDOMNode().value);
           if (isNaN(interestRate)) {
-            interestRate = 16;
+            interestRate = 16.0;
           }
           this.setState({interestRate: interestRate});
+        },
+        handleDueDateChange: function() {
+          var date = new Date(this.refs.dueDate.getDOMNode().value);
+          this.setState({dueDate: date});
         }
       });
 
